@@ -26,7 +26,6 @@ set_llm_cache(SQLiteCache(database_path=os.path.join(cache_dir, "langchain.db"))
 st.set_page_config(
     page_title="Agentic Table Playground",
     page_icon="🧮",
-    layout="wide",
     initial_sidebar_state="expanded"
 )
 
@@ -51,25 +50,42 @@ if "operation_steps" not in st.session_state:
     st.session_state.operation_steps = []
 
 
+
+
+
+
 def main():
     """Main application entry point."""
     st.title("🧮 Agentic Table Playground")
-    
+
     # Add description
     st.markdown("""
-    ### Welcome to the AI Agent-Powered Data Processing Playground
-    
-    **Agentic Table Playground** leverages AI agents to enable complex data processing through natural language interaction.
-    Simply upload your CSV or Excel files and describe what you want to do in plain English!
-    
-    **Key Features:**
-    - 🔗 **Table Merging**: Join related tables like Excel VLOOKUP
-    - 🔄 **Data Reshaping**: Convert between wide and long formats  
-    - ⚖️ **Data Comparison**: Find differences between datasets
-    - 📊 **Vertical Stacking**: Combine similar tables
-    - 🧹 **Data Deduplication**: Remove duplicate records
-    - 🤖 **Multi-step Processing**: Handle complex workflows with AI agents
+    ### Function Calling Demo for Data Processing
+
+    A demo showcasing custom function calling implementation. Upload CSV/Excel files and describe
+    your data processing needs in natural language.
     """)
+
+    # System Architecture and Features in an expandable section
+    with st.expander("🏗️ **Features & Architecture**", expanded=False):
+        st.markdown("### System Workflow Diagram")
+
+        # Display the system architecture diagram
+        st.image("frontend/assets/system_architecture.png",
+                caption="System Workflow Diagram",
+                use_container_width=True)
+
+        st.markdown("""
+        ### Component Details
+        - **Frontend**: Streamlit - Clean web interface
+        - **Backend**: Python + Pandas - Powerful data processing capabilities
+        - **AI Engine**: LangChain + OpenAI - Natural language understanding
+        - **Vector Database**: Milvus - Tool retrieval and example matching
+        - **Monitoring**: Langfuse - LLM call monitoring and optimization
+
+        **Supported Operations:**
+        Table Merging • Data Reshaping • Data Comparison • Vertical Stacking • Data Deduplication
+        """)
 
     # Project information
     display_project_info()
@@ -78,8 +94,8 @@ def main():
 
     # Privacy notice
     st.warning(
-        "**Privacy Notice**: The system only accesses file names and column headers—it does not read or store your actual table data. "
-        "Table previews are temporarily loaded in memory and cleared when you refresh the page."
+        "**Privacy Notice**: The system accesses file names and column headers—it does not read or store your table data. "
+        "Table previews are temporarily loaded in memory and cleared you refresh the page."
     )
 
     # Core functionality

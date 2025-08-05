@@ -139,13 +139,17 @@ def create_embeddings(model: Optional[str] = None) -> "OpenAIEmbeddings":
 
     model = model or os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
-    openai_api_key = os.environ.get("OPENAI_API_KEY")
-    if not openai_api_key:
+    # Use EMBEDDING_API_KEY for embedding operations
+    embedding_api_key = os.environ.get("EMBEDDING_API_KEY")
+    if not embedding_api_key:
         raise ValueError(
-            "OPENAI_API_KEY environment variable not found. Please set your OpenAI API key."
+            "EMBEDDING_API_KEY environment variable not found. Please set your embedding API key."
         )
 
-    embedding_params = {"model": model}
+    embedding_params = {
+        "model": model,
+        "api_key": embedding_api_key
+    }
 
     # Add custom API base URL if specified
     embedding_api_base = os.environ.get("EMBEDDING_API_BASE")
