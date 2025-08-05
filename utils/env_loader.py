@@ -13,13 +13,21 @@ def load_env():
     try:
         # Try to import streamlit and use secrets if available (Streamlit Cloud)
         import streamlit as st
-        if hasattr(st, 'secrets') and st.secrets:
-            # Load secrets into environment variables
-            for key, value in st.secrets.items():
-                if isinstance(value, (str, int, float, bool)):
-                    os.environ[key] = str(value)
-            print("Environment variables loaded from Streamlit secrets")
-            return
+        if hasattr(st, 'secrets'):
+            try:
+                # Try to access secrets safely
+                secrets = st.secrets
+                if secrets:
+                    # Load secrets into environment variables
+                    for key, value in secrets.items():
+                        if isinstance(value, (str, int, float, bool)):
+                            os.environ[key] = str(value)
+                    print("Environment variables loaded from Streamlit secrets")
+                    return
+            except Exception as e:
+                print(f"Warning: Could not load Streamlit secrets: {e}")
+                # Continue to .env file fallback
+                pass
     except (ImportError, AttributeError):
         # Streamlit not available or no secrets, continue with .env file
         pass
