@@ -1,0 +1,59 @@
+{
+    "collections": {
+        "tools_description": {
+            "name": "tools_description",
+            "description": "Collection for storing tool function descriptions",
+            "fields": [
+                {
+                    "name": "tool_name",
+                    "type": "str",
+                    "description": "Name of the tool function"
+                },
+                {
+                    "name": "description",
+                    "type": "str",
+                    "description": "Description of the tool function",
+                    "is_vector": true
+                },
+                {
+                    "name": "full_description",
+                    "type": "str",
+                    "description": "Full description of the tool function"
+                },
+                {
+                    "name": "args",
+                    "type": "str",
+                    "description": "Arguments of the tool function"
+                }
+            ],
+            "embedding_fields": [
+                "description"
+            ]
+        },
+        "data_operation_examples": {
+            "name": "data_operation_examples",
+            "description": "Examples for data operation tasks",
+            "fields": [
+                {
+                    "name": "user_tables",
+                    "type": "str",
+                    "description": "User uploaded tables information"
+                },
+                {
+                    "name": "user_query",
+                    "type": "str",
+                    "description": "User query",
+                    "is_vector": true
+                },
+                {
+                    "name": "output",
+                    "type": "str",
+                    "description": "Output of the operation"
+                }
+            ],
+            "embedding_fields": [
+                "user_query"
+            ]
+        }
+    }
+}

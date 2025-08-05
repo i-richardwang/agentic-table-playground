@@ -1,0 +1,33 @@
+[project]
+name = "agentic-table-playground"
+version = "0.1.0"
+description = "Agentic table processing playground with LLM and vector database integration"
+requires-python = ">=3.12"
+dependencies = [
+    # Core dependencies for agentic table processing functionality
+    "pandas",
+    "streamlit",
+    "pillow",
+
+    # LLM and AI functionality
+    "langchain-openai",
+    "langchain-core",
+    "langchain",
+    "langchain-community",
+    "openai",
+    "pydantic",
+
+    # Vector database for tool retrieval
+    "pymilvus",
+
+    # LLM observability and monitoring
+    "langfuse",
+
+    # Utilities
+    "requests",
+    "python-dotenv",
+    "numpy",
+    "tqdm",
+    "tenacity",
+    "typing-extensions",
+]

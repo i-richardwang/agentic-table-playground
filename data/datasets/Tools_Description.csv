@@ -1,0 +1,278 @@
+﻿tool_name,description,full_description,args
+join_dataframes,"Joins two dataframes based on specified columns, similar to SQL JOIN operations.
+
+Use cases:
+- Combining two related datasets based on common information (e.g., ID or date).
+- Enriching a primary dataset with additional information from a secondary dataset.","Joins two dataframes based on specified columns, similar to SQL JOIN operations.
+
+Use cases:
+- Combining two related datasets based on common information (e.g., ID or date).
+- Enriching a primary dataset with additional information from a secondary dataset.
+
+Notes:
+- Ensure that the columns used for join operation exist in both dataframes.
+- For left_columns and right_columns parameters:
+  * If not explicitly specified by the user, all columns will be included by default.
+
+Output:
+- Returns a pandas DataFrame containing the result of the join operation.","{'left_df': {'title': 'Left Df', 'description': 'Left dataframe for the join operation'}, 'right_df': {'title': 'Right Df', 'description': 'Right dataframe to be joined with the left dataframe'}, 'how': {'title': 'How', 'description': ""Join method: 'left', or 'right'"", 'type': 'string'}, 'left_on': {'title': 'Left On', 'description': 'Column name(s) from the left dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'right_on': {'title': 'Right On', 'description': 'Column name(s) from the right dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'left_columns': {'title': 'Left Columns', 'description': 'List of column names from the left dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}, 'right_columns': {'title': 'Right Columns', 'description': 'List of column names from the right dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}}"
+reshape_wide_to_long,"Reshapes a wide-format dataframe into a long format. This process is often referred to as ""melting"" or ""unpivoting"".
+
+Use cases:
+- Converting wide-format data to long format for time series analysis or longitudinal data analysis.
+- Preparing data for certain types of statistical analyses or visualizations that require long-format data.
+- Consolidating multiple category columns into a single category column and a value column for easier analysis.","Reshapes a wide-format dataframe into a long format. This process is often referred to as ""melting"" or ""unpivoting"".
+
+Use cases:
+- Converting wide-format data to long format for time series analysis or longitudinal data analysis.
+- Preparing data for certain types of statistical analyses or visualizations that require long-format data.
+- Consolidating multiple category columns into a single category column and a value column for easier analysis.
+
+Notes:
+- Ensure that all columns listed in columns_to_compress exist in the dataframe.
+- For new_column_for_old_headers and new_column_for_values parameters:
+  * If the user doesn't explicitly specify names for these new columns, you can generate appropriate names based on the context of the data.
+
+Output:
+- Returns a pandas DataFrame representing the reshaped long-format data.","{'df': {'title': 'Df', 'description': 'Input wide-format dataframe where each row represents a unique entity with data for multiple time points or categories spread across different columns'}, 'columns_to_compress': {'title': 'Columns To Compress', 'description': 'List of column names to be compressed into long format, these columns will be converted into values in a single column', 'type': 'array', 'items': {'type': 'string'}}, 'new_column_for_old_headers': {'title': 'New Column For Old Headers', 'description': 'Name of the new column that will store the original column names (as identifiers)', 'type': 'string'}, 'new_column_for_values': {'title': 'New Column For Values', 'description': 'Name of the new column that will store the values from the original columns', 'type': 'string'}}"
+reshape_long_to_wide,"Reshapes a long-format dataframe into a wide format. This process is often referred to as ""pivoting"" or ""casting"".
+
+Use cases:
+- Converting time series data from long format to wide format with each time point as a separate column.
+- Creating cross-tabulations or pivot tables for data summarization and reporting.
+- Preparing data for specific types of analyses or visualizations that require wide-format data.","Reshapes a long-format dataframe into a wide format. This process is often referred to as ""pivoting"" or ""casting"".
+
+Use cases:
+- Converting time series data from long format to wide format with each time point as a separate column.
+- Creating cross-tabulations or pivot tables for data summarization and reporting.
+- Preparing data for specific types of analyses or visualizations that require wide-format data.
+
+Notes:
+- Ensure that column_to_use_as_headers and column_with_values exist in the dataframe.
+
+Output:
+- Returns a pandas DataFrame representing the reshaped wide-format data.","{'df': {'title': 'Df', 'description': 'Input long-format dataframe where one column contains values that will become new column names, and another column contains the values for these new columns'}, 'column_to_use_as_headers': {'title': 'Column To Use As Headers', 'description': 'Name of the column containing values that will become new column names', 'type': 'string'}, 'column_with_values': {'title': 'Column With Values', 'description': 'Name of the column containing the values that will populate the new columns', 'type': 'string'}, 'aggfunc': {'title': 'Aggfunc', 'description': ""Aggregation function to use when there are duplicate values, e.g., 'first', 'last', 'mean', 'sum', etc."", 'default': 'first', 'type': 'string'}}"
+compare_dataframes,"Compares two dataframes based on specified key columns and identifies the differences between them.
+
+Use cases:
+- Checking for changes after data updates, such as identifying new or deleted records.
+- Verifying data integrity after migration or transformation processes.
+- Comparing two similar but potentially different datasets, such as snapshots from different time points.","Compares two dataframes based on specified key columns and identifies the differences between them.
+
+Use cases:
+- Checking for changes after data updates, such as identifying new or deleted records.
+- Verifying data integrity after migration or transformation processes.
+- Comparing two similar but potentially different datasets, such as snapshots from different time points.
+
+Output:
+- Returns a tuple of two pandas DataFrames:
+  1. The first DataFrame (only_in_df1) contains records that exist only in df1.
+  2. The second DataFrame (only_in_df2) contains records that exist only in df2.","{'df1': {'title': 'Df1', 'description': 'First dataframe, used as the base for comparison'}, 'df2': {'title': 'Df2', 'description': 'Second dataframe, to be compared with the first dataframe'}, 'key_column_df1': {'title': 'Key Column Df1', 'description': 'Name of the key column in df1 used to identify unique records', 'type': 'string'}, 'key_column_df2': {'title': 'Key Column Df2', 'description': 'Name of the key column in df2, if different from df1. If None, assumes same as df1', 'type': 'string'}}"
+stack_dataframes,"Vertically concatenates multiple DataFrames, similar to a SQL UNION operation.
+
+Use cases:
+- Combining data from multiple periods or sources with similar structures, such as employee information tables from different years.","Vertically concatenates multiple DataFrames, similar to a SQL UNION operation.
+
+Use cases:
+- Combining data from multiple periods or sources with similar structures, such as employee information tables from different years.
+
+Note:
+- equivalent_columns:
+  Keys are the standard column names, and values are lists of equivalent names.
+  This allows the function to identify and standardize columns with different names but the same semantic meaning across DataFrames.
+  If not provided or set to None, the function will use the original column names without any renaming.
+
+Output:
+Returns a pandas DataFrame containing the vertically stacked data from all input DataFrames.","{'dataframes': {'title': 'Dataframes', 'description': 'List of DataFrames to be vertically stacked', 'type': 'array', 'items': {}}, 'equivalent_columns': {'title': 'Equivalent Columns', 'description': 'Optional: Dictionary of equivalent column names across different DataFrames', 'type': 'object', 'additionalProperties': {'type': 'array', 'items': {'type': 'string'}}}}"
+deduplicate_dataframe,"Deduplicates a dataframe based on specified columns or removes completely duplicate rows.
+
+Use cases:
+- Removing completely duplicate rows across all columns.
+- Keeping only the most recent record for each employee (e.g., latest promotion).
+- Retaining the record with the highest value for each group (e.g., longest working day per employee per year).","Deduplicates a dataframe based on specified columns or removes completely duplicate rows.
+
+Use cases:
+- Removing completely duplicate rows across all columns.
+- Keeping only the most recent record for each employee (e.g., latest promotion).
+- Retaining the record with the highest value for each group (e.g., longest working day per employee per year).
+
+Notes:
+- If group_by_columns is None, the function removes completely duplicate rows across all columns.
+- If group_by_columns is specified, the function groups the dataframe by these columns, sorts within each group by sort_column,
+  and then keeps the first record of each group after sorting.
+- Set 'ascending=False' to keep the record with the highest value in 'sort_column'.
+- Set 'ascending=True' to keep the record with the lowest value in 'sort_column'.
+
+Output:
+- Returns a pandas DataFrame with duplicates removed according to the specified criteria.","{'df': {'title': 'Df', 'description': 'Input dataframe to be deduplicated'}, 'group_by_columns': {'title': 'Group By Columns', 'description': 'Column(s) to group by for deduplication. If None, removes completely duplicate rows', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'sort_column': {'title': 'Sort Column', 'description': 'Column to sort by within each group. Required if group_by_columns is specified', 'type': 'string'}, 'ascending': {'title': 'Ascending', 'description': 'Sort in ascending order if True, descending if False', 'default': False, 'type': 'boolean'}}"
+join_dataframes,"Joins two dataframes based on specified columns, similar to SQL JOIN operations.","Joins two dataframes based on specified columns, similar to SQL JOIN operations.
+
+Use cases:
+- Combining two related datasets based on common information (e.g., ID or date).
+- Enriching a primary dataset with additional information from a secondary dataset.
+
+Notes:
+- Ensure that the columns used for join operation exist in both dataframes.
+- For left_columns and right_columns parameters:
+  * If not explicitly specified by the user, all columns will be included by default.
+
+Output:
+- Returns a pandas DataFrame containing the result of the join operation.","{'left_df': {'title': 'Left Df', 'description': 'Left dataframe for the join operation'}, 'right_df': {'title': 'Right Df', 'description': 'Right dataframe to be joined with the left dataframe'}, 'how': {'title': 'How', 'description': ""Join method: 'left', or 'right'"", 'type': 'string'}, 'left_on': {'title': 'Left On', 'description': 'Column name(s) from the left dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'right_on': {'title': 'Right On', 'description': 'Column name(s) from the right dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'left_columns': {'title': 'Left Columns', 'description': 'List of column names from the left dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}, 'right_columns': {'title': 'Right Columns', 'description': 'List of column names from the right dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}}"
+join_dataframes,"Matches related information based on common fields.","Joins two dataframes based on specified columns, similar to SQL JOIN operations.
+
+Use cases:
+- Combining two related datasets based on common information (e.g., ID or date).
+- Enriching a primary dataset with additional information from a secondary dataset.
+
+Notes:
+- Ensure that the columns used for join operation exist in both dataframes.
+- For left_columns and right_columns parameters:
+  * If not explicitly specified by the user, all columns will be included by default.
+
+Output:
+- Returns a pandas DataFrame containing the result of the join operation.","{'left_df': {'title': 'Left Df', 'description': 'Left dataframe for the join operation'}, 'right_df': {'title': 'Right Df', 'description': 'Right dataframe to be joined with the left dataframe'}, 'how': {'title': 'How', 'description': ""Join method: 'left', or 'right'"", 'type': 'string'}, 'left_on': {'title': 'Left On', 'description': 'Column name(s) from the left dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'right_on': {'title': 'Right On', 'description': 'Column name(s) from the right dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'left_columns': {'title': 'Left Columns', 'description': 'List of column names from the left dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}, 'right_columns': {'title': 'Right Columns', 'description': 'List of column names from the right dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}}"
+join_dataframes,"Enriches the primary dataset with additional information from auxiliary datasets.","Joins two dataframes based on specified columns, similar to SQL JOIN operations.
+
+Use cases:
+- Combining two related datasets based on common information (e.g., ID or date).
+- Enriching a primary dataset with additional information from a secondary dataset.
+
+Notes:
+- Ensure that the columns used for join operation exist in both dataframes.
+- For left_columns and right_columns parameters:
+  * If not explicitly specified by the user, all columns will be included by default.
+
+Output:
+- Returns a pandas DataFrame containing the result of the join operation.","{'left_df': {'title': 'Left Df', 'description': 'Left dataframe for the join operation'}, 'right_df': {'title': 'Right Df', 'description': 'Right dataframe to be joined with the left dataframe'}, 'how': {'title': 'How', 'description': ""Join method: 'left', or 'right'"", 'type': 'string'}, 'left_on': {'title': 'Left On', 'description': 'Column name(s) from the left dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'right_on': {'title': 'Right On', 'description': 'Column name(s) from the right dataframe to use as join key(s)', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'left_columns': {'title': 'Left Columns', 'description': 'List of column names from the left dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}, 'right_columns': {'title': 'Right Columns', 'description': 'List of column names from the right dataframe to include in the result, if None all columns are included', 'type': 'array', 'items': {'type': 'string'}}}"
+reshape_wide_to_long,"Reshapes a wide-format dataframe into a long format.","Reshapes a wide-format dataframe into a long format. This process is often referred to as ""melting"" or ""unpivoting"".
+
+Use cases:
+- Converting wide-format data to long format for time series analysis or longitudinal data analysis.
+- Preparing data for certain types of statistical analyses or visualizations that require long-format data.
+- Consolidating multiple category columns into a single category column and a value column for easier analysis.
+
+Notes:
+- Ensure that all columns listed in columns_to_compress exist in the dataframe.
+- For new_column_for_old_headers and new_column_for_values parameters:
+  * If the user doesn't explicitly specify names for these new columns, you can generate appropriate names based on the context of the data.
+
+Output:
+- Returns a pandas DataFrame representing the reshaped long-format data.","{'df': {'title': 'Df', 'description': 'Input wide-format dataframe where each row represents a unique entity with data for multiple time points or categories spread across different columns'}, 'columns_to_compress': {'title': 'Columns To Compress', 'description': 'List of column names to be compressed into long format, these columns will be converted into values in a single column', 'type': 'array', 'items': {'type': 'string'}}, 'new_column_for_old_headers': {'title': 'New Column For Old Headers', 'description': 'Name of the new column that will store the original column names (as identifiers)', 'type': 'string'}, 'new_column_for_values': {'title': 'New Column For Values', 'description': 'Name of the new column that will store the values from the original columns', 'type': 'string'}}"
+reshape_wide_to_long,"Consolidates multiple category columns into a single category column and value column.","Reshapes a wide-format dataframe into a long format. This process is often referred to as ""melting"" or ""unpivoting"".
+
+Use cases:
+- Converting wide-format data to long format for time series analysis or longitudinal data analysis.
+- Preparing data for certain types of statistical analyses or visualizations that require long-format data.
+- Consolidating multiple category columns into a single category column and a value column for easier analysis.
+
+Notes:
+- Ensure that all columns listed in columns_to_compress exist in the dataframe.
+- For new_column_for_old_headers and new_column_for_values parameters:
+  * If the user doesn't explicitly specify names for these new columns, you can generate appropriate names based on the context of the data.
+
+Output:
+- Returns a pandas DataFrame representing the reshaped long-format data.","{'df': {'title': 'Df', 'description': 'Input wide-format dataframe where each row represents a unique entity with data for multiple time points or categories spread across different columns'}, 'columns_to_compress': {'title': 'Columns To Compress', 'description': 'List of column names to be compressed into long format, these columns will be converted into values in a single column', 'type': 'array', 'items': {'type': 'string'}}, 'new_column_for_old_headers': {'title': 'New Column For Old Headers', 'description': 'Name of the new column that will store the original column names (as identifiers)', 'type': 'string'}, 'new_column_for_values': {'title': 'New Column For Values', 'description': 'Name of the new column that will store the values from the original columns', 'type': 'string'}}"
+reshape_long_to_wide,"Reshapes a long-format dataframe into a wide format.","Reshapes a long-format dataframe into a wide format. This process is often referred to as ""pivoting"" or ""casting"".
+
+Use cases:
+- Converting time series data from long format to wide format with each time point as a separate column.
+- Creating cross-tabulations or pivot tables for data summarization and reporting.
+- Preparing data for specific types of analyses or visualizations that require wide-format data.
+
+Notes:
+- Ensure that column_to_use_as_headers and column_with_values exist in the dataframe.
+
+Output:
+- Returns a pandas DataFrame representing the reshaped wide-format data.","{'df': {'title': 'Df', 'description': 'Input long-format dataframe where one column contains values that will become new column names, and another column contains the values for these new columns'}, 'column_to_use_as_headers': {'title': 'Column To Use As Headers', 'description': 'Name of the column containing values that will become new column names', 'type': 'string'}, 'column_with_values': {'title': 'Column With Values', 'description': 'Name of the column containing the values that will populate the new columns', 'type': 'string'}, 'aggfunc': {'title': 'Aggfunc', 'description': ""Aggregation function to use when there are duplicate values, e.g., 'first', 'last', 'mean', 'sum', etc."", 'default': 'first', 'type': 'string'}}"
+reshape_long_to_wide,"Transposes single category column and value column into multiple category columns.","Reshapes a long-format dataframe into a wide format. This process is often referred to as ""pivoting"" or ""casting"".
+
+Use cases:
+- Converting time series data from long format to wide format with each time point as a separate column.
+- Creating cross-tabulations or pivot tables for data summarization and reporting.
+- Preparing data for specific types of analyses or visualizations that require wide-format data.
+
+Notes:
+- Ensure that column_to_use_as_headers and column_with_values exist in the dataframe.
+
+Output:
+- Returns a pandas DataFrame representing the reshaped wide-format data.","{'df': {'title': 'Df', 'description': 'Input long-format dataframe where one column contains values that will become new column names, and another column contains the values for these new columns'}, 'column_to_use_as_headers': {'title': 'Column To Use As Headers', 'description': 'Name of the column containing values that will become new column names', 'type': 'string'}, 'column_with_values': {'title': 'Column With Values', 'description': 'Name of the column containing the values that will populate the new columns', 'type': 'string'}, 'aggfunc': {'title': 'Aggfunc', 'description': ""Aggregation function to use when there are duplicate values, e.g., 'first', 'last', 'mean', 'sum', etc."", 'default': 'first', 'type': 'string'}}"
+compare_dataframes,"Compares two dataframes based on specified key columns and identifies the differences between them.","Compares two dataframes based on specified key columns and identifies the differences between them.
+
+Use cases:
+- Checking for changes after data updates, such as identifying new or deleted records.
+- Verifying data integrity after migration or transformation processes.
+- Comparing two similar but potentially different datasets, such as snapshots from different time points.
+
+Output:
+- Returns a tuple of two pandas DataFrames:
+  1. The first DataFrame (only_in_df1) contains records that exist only in df1.
+  2. The second DataFrame (only_in_df2) contains records that exist only in df2.","{'df1': {'title': 'Df1', 'description': 'First dataframe, used as the base for comparison'}, 'df2': {'title': 'Df2', 'description': 'Second dataframe, to be compared with the first dataframe'}, 'key_column_df1': {'title': 'Key Column Df1', 'description': 'Name of the key column in df1 used to identify unique records', 'type': 'string'}, 'key_column_df2': {'title': 'Key Column Df2', 'description': 'Name of the key column in df2, if different from df1. If None, assumes same as df1', 'type': 'string'}}"
+compare_dataframes,"Checks for changes after data updates, such as identifying new or deleted records.","Compares two dataframes based on specified key columns and identifies the differences between them.
+
+Use cases:
+- Checking for changes after data updates, such as identifying new or deleted records.
+- Verifying data integrity after migration or transformation processes.
+- Comparing two similar but potentially different datasets, such as snapshots from different time points.
+
+Output:
+- Returns a tuple of two pandas DataFrames:
+  1. The first DataFrame (only_in_df1) contains records that exist only in df1.
+  2. The second DataFrame (only_in_df2) contains records that exist only in df2.","{'df1': {'title': 'Df1', 'description': 'First dataframe, used as the base for comparison'}, 'df2': {'title': 'Df2', 'description': 'Second dataframe, to be compared with the first dataframe'}, 'key_column_df1': {'title': 'Key Column Df1', 'description': 'Name of the key column in df1 used to identify unique records', 'type': 'string'}, 'key_column_df2': {'title': 'Key Column Df2', 'description': 'Name of the key column in df2, if different from df1. If None, assumes same as df1', 'type': 'string'}}"
+stack_dataframes,"Vertically concatenates multiple DataFrames, similar to a SQL UNION operation.","Vertically concatenates multiple DataFrames, similar to a SQL UNION operation.
+
+Use cases:
+- Combining data from multiple periods or sources with similar structures, such as employee information tables from different years.
+
+Note:
+- equivalent_columns:
+  Keys are the standard column names, and values are lists of equivalent names.
+  This allows the function to identify and standardize columns with different names but the same semantic meaning across DataFrames.
+  If not provided or set to None, the function will use the original column names without any renaming.
+
+Output:
+Returns a pandas DataFrame containing the vertically stacked data from all input DataFrames.","{'dataframes': {'title': 'Dataframes', 'description': 'List of DataFrames to be vertically stacked', 'type': 'array', 'items': {}}, 'equivalent_columns': {'title': 'Equivalent Columns', 'description': 'Optional: Dictionary of equivalent column names across different DataFrames', 'type': 'object', 'additionalProperties': {'type': 'array', 'items': {'type': 'string'}}}}"
+stack_dataframes,"Combines data from multiple periods or sources with similar structures.","Vertically concatenates multiple DataFrames, similar to a SQL UNION operation.
+
+Use cases:
+- Combining data from multiple periods or sources with similar structures, such as employee information tables from different years.
+
+Note:
+- equivalent_columns:
+  Keys are the standard column names, and values are lists of equivalent names.
+  This allows the function to identify and standardize columns with different names but the same semantic meaning across DataFrames.
+  If not provided or set to None, the function will use the original column names without any renaming.
+
+Output:
+Returns a pandas DataFrame containing the vertically stacked data from all input DataFrames.","{'dataframes': {'title': 'Dataframes', 'description': 'List of DataFrames to be vertically stacked', 'type': 'array', 'items': {}}, 'equivalent_columns': {'title': 'Equivalent Columns', 'description': 'Optional: Dictionary of equivalent column names across different DataFrames', 'type': 'object', 'additionalProperties': {'type': 'array', 'items': {'type': 'string'}}}}"
+deduplicate_dataframe,"Deduplicates a dataframe based on specified columns or removes completely duplicate rows.","Deduplicates a dataframe based on specified columns or removes completely duplicate rows.
+
+Use cases:
+- Removing completely duplicate rows across all columns.
+- Keeping only the most recent record for each employee (e.g., latest promotion).
+- Retaining the record with the highest value for each group (e.g., longest working day per employee per year).
+
+Notes:
+- If group_by_columns is None, the function removes completely duplicate rows across all columns.
+- If group_by_columns is specified, the function groups the dataframe by these columns, sorts within each group by sort_column,
+  and then keeps the first record of each group after sorting.
+- Set 'ascending=False' to keep the record with the highest value in 'sort_column'.
+- Set 'ascending=True' to keep the record with the lowest value in 'sort_column'.
+
+Output:
+- Returns a pandas DataFrame with duplicates removed according to the specified criteria.","{'df': {'title': 'Df', 'description': 'Input dataframe to be deduplicated'}, 'group_by_columns': {'title': 'Group By Columns', 'description': 'Column(s) to group by for deduplication. If None, removes completely duplicate rows', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'sort_column': {'title': 'Sort Column', 'description': 'Column to sort by within each group. Required if group_by_columns is specified', 'type': 'string'}, 'ascending': {'title': 'Ascending', 'description': 'Sort in ascending order if True, descending if False', 'default': False, 'type': 'boolean'}}"
+deduplicate_dataframe,"Keeps the most recent record or the record with the highest value.","Deduplicates a dataframe based on specified columns or removes completely duplicate rows.
+
+Use cases:
+- Removing completely duplicate rows across all columns.
+- Keeping only the most recent record for each employee (e.g., latest promotion).
+- Retaining the record with the highest value for each group (e.g., longest working day per employee per year).
+
+Notes:
+- If group_by_columns is None, the function removes completely duplicate rows across all columns.
+- If group_by_columns is specified, the function groups the dataframe by these columns, sorts within each group by sort_column,
+  and then keeps the first record of each group after sorting.
+- Set 'ascending=False' to keep the record with the highest value in 'sort_column'.
+- Set 'ascending=True' to keep the record with the lowest value in 'sort_column'.
+
+Output:
+- Returns a pandas DataFrame with duplicates removed according to the specified criteria.","{'df': {'title': 'Df', 'description': 'Input dataframe to be deduplicated'}, 'group_by_columns': {'title': 'Group By Columns', 'description': 'Column(s) to group by for deduplication. If None, removes completely duplicate rows', 'anyOf': [{'type': 'string'}, {'type': 'array', 'items': {'type': 'string'}}]}, 'sort_column': {'title': 'Sort Column', 'description': 'Column to sort by within each group. Required if group_by_columns is specified', 'type': 'string'}, 'ascending': {'title': 'Ascending', 'description': 'Sort in ascending order if True, descending if False', 'default': False, 'type': 'boolean'}}"
