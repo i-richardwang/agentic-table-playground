@@ -12,7 +12,11 @@ sys.path.append(project_root)
 from langchain_core.globals import set_llm_cache
 from langchain_community.cache import SQLiteCache
 
-set_llm_cache(SQLiteCache(database_path="data/llm_cache/langchain.db"))
+# Ensure cache directory exists
+cache_dir = os.path.join(project_root, "data", "llm_cache")
+os.makedirs(cache_dir, exist_ok=True)
+
+set_llm_cache(SQLiteCache(database_path=os.path.join(cache_dir, "langchain.db")))
 
 # Set page configuration
 st.set_page_config(
