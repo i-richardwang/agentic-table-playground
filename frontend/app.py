@@ -9,6 +9,10 @@ import pandas as pd
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(project_root)
 
+# Load environment variables before importing other modules
+from utils.env_loader import load_env
+load_env()
+
 from langchain_core.globals import set_llm_cache
 from langchain_community.cache import SQLiteCache
 
