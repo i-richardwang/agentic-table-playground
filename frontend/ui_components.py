@@ -45,7 +45,7 @@ def display_project_info():
         <div class="project-info">
             <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                 <span>
-                    <strong>🚀 Open Source Project</strong> by
+                    <strong>🚀 开源项目</strong> by
                     <a href="https://github.com/i-richardwang" target="_blank">
                         <strong>Richard Wang</strong>
                     </a>
@@ -53,10 +53,10 @@ def display_project_info():
                 <span class="project-separator">•</span>
                 <a href="https://github.com/i-richardwang/agentic-table-playground" target="_blank"
                    style="display: flex; align-items: center; gap: 0.3rem;">
-                    <span>📁</span> <strong>GitHub Repository</strong>
+                    <span>📁</span> <strong>GitHub 仓库</strong>
                 </a>
                 <span class="project-separator">•</span>
-                <span class="project-separator">⭐ Star if you find it useful!</span>
+                <span class="project-separator">⭐ 觉得有用请点个 Star！</span>
             </div>
         </div>
         """,

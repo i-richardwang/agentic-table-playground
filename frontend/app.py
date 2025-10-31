@@ -60,31 +60,31 @@ def main():
 
     # Add description
     st.markdown("""
-    ### Function Calling Demo for Data Processing
+    ### 智能表格处理演示平台
 
-    A demo showcasing custom function calling implementation. Upload CSV/Excel files and describe
-    your data processing needs in natural language.
+    基于 AI Function Calling 技术实现的数据处理演示。上传 CSV/Excel 文件，
+    用自然语言描述您的数据处理需求即可完成操作。
     """)
 
     # System Architecture and Features in an expandable section
-    with st.expander("🏗️ **Features & Architecture**", expanded=False):
-        st.markdown("### System Workflow Diagram")
+    with st.expander("🏗️ **功能介绍与系统架构**", expanded=False):
+        st.markdown("### 系统工作流程图")
 
         # Display the system architecture diagram
         st.image("frontend/assets/system_architecture.png",
-                caption="System Workflow Diagram",
+                caption="系统工作流程图",
                 use_container_width=True)
 
         st.markdown("""
-        ### Component Details
-        - **Frontend**: Streamlit - Clean web interface
-        - **Backend**: Python + Pandas - Powerful data processing capabilities
-        - **AI Engine**: LangChain + OpenAI - Natural language understanding
-        - **Vector Database**: Milvus - Tool retrieval and example matching
-        - **Monitoring**: Langfuse - LLM call monitoring and optimization
+        ### 技术架构
+        - **前端**：Streamlit - 简洁的 Web 界面
+        - **后端**：Python + Pandas - 强大的数据处理能力
+        - **AI 引擎**：LangChain + OpenAI - 自然语言理解
+        - **向量数据库**：Milvus - 工具检索与示例匹配
+        - **监控系统**：Langfuse - LLM 调用监控与优化
 
-        **Supported Operations:**
-        Table Merging • Data Reshaping • Data Comparison • Vertical Stacking • Data Deduplication
+        **支持的操作类型：**
+        表格合并 • 数据重塑 • 数据比较 • 垂直堆叠 • 数据去重
         """)
 
     # Project information
@@ -94,8 +94,8 @@ def main():
 
     # Privacy notice
     st.warning(
-        "**Privacy Notice**: The system accesses file names and column headers—it does not read or store your table data. "
-        "Table previews are temporarily loaded in memory and cleared you refresh the page."
+        "**隐私提示**：系统仅读取文件名和列名信息，不会读取或存储您的具体表格数据。"
+        "表格预览内容临时存储在内存中，刷新页面后会自动清除。"
     )
 
     # Core functionality
@@ -106,7 +106,7 @@ def main():
             process_user_query()
         else:
             # Show only the input box without the Dataset Operations section
-            user_query = st.chat_input("Enter your dataset operation requirements:")
+            user_query = st.chat_input("请输入您的数据处理需求：")
             if user_query:
                 # Add the user query to conversation history and then show the full interface
                 st.session_state.conversation_history.append({"role": "user", "content": user_query})
@@ -141,13 +141,13 @@ def handle_file_upload():
 
     Processes uploaded files, cleans column names, and loads them into the workflow.
     """
-    st.markdown("## Data Upload")
+    st.markdown("## 数据上传")
     with st.container(border=True):
         uploaded_files = st.file_uploader(
-            "Select CSV or Excel files (multiple files supported)",
+            "选择 CSV 或 Excel 文件（支持多文件上传）",
             type=["csv", "xlsx", "xls"],
             accept_multiple_files=True,
-            help="Upload CSV or Excel files. Multiple files can be uploaded for operations like merging or comparison."
+            help="上传 CSV 或 Excel 格式的数据文件。可以上传多个文件进行合并、比较等操作。"
         )
 
         if uploaded_files:
@@ -173,17 +173,17 @@ def handle_file_upload():
                 st.session_state.workflow.load_dataframes(dataframes)
                 st.session_state.files_uploaded = True
 
-                st.success(f"Successfully uploaded {len(uploaded_files)} file(s)!")
+                st.success(f"成功上传 {len(uploaded_files)} 个文件！")
 
             except Exception as e:
-                st.error(f"Error uploading files: {str(e)}")
+                st.error(f"文件上传失败：{str(e)}")
                 st.session_state.files_uploaded = False
         else:
             st.session_state.files_uploaded = False
 
         if st.session_state.files_uploaded:
             st.markdown("---")
-            st.markdown("#### Uploaded Dataset Preview")
+            st.markdown("#### 已上传数据集预览")
             display_loaded_dataframes()
 
 
@@ -197,7 +197,7 @@ def display_loaded_dataframes():
     original_dataframes = st.session_state.workflow.get_original_dataframe_info()
 
     if not original_dataframes:
-        st.info("No datasets uploaded yet. Please upload data files first.")
+        st.info("还没有上传数据集，请先上传数据文件。")
         return
 
     df_names = list(original_dataframes.keys())
@@ -213,7 +213,7 @@ def display_loaded_dataframes():
                 st.dataframe(df_info["preview"], use_container_width=True)
 
     st.caption(
-        "Note: To ensure data processing accuracy, column names containing special characters or spaces will be automatically cleaned."
+        "提示：为确保数据处理准确性，包含特殊字符或空格的列名将被自动清理。"
     )
 
 
@@ -223,7 +223,7 @@ def process_user_query():
 
     Handles conversation history, user input, and AI responses for dataset operations.
     """
-    st.markdown("## Dataset Operations")
+    st.markdown("## 数据集操作")
 
     chat_container = st.container(border=True)
     input_placeholder = st.empty()
@@ -238,7 +238,7 @@ def process_user_query():
         user_query = st.session_state.conversation_history[-1]["content"]
         process_and_display_response(chat_container, user_query)
 
-    user_query = input_placeholder.chat_input("Enter your dataset operation requirements:")
+    user_query = input_placeholder.chat_input("请输入您的数据处理需求：")
 
     if user_query:
         display_user_input(chat_container, user_query)
@@ -275,7 +275,7 @@ def process_and_display_response(container, user_query):
 
     with thinking_placeholder:
         with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
+            with st.spinner("思考中..."):
                 result = st.session_state.workflow.process_query(user_query)
 
     thinking_placeholder.empty()
@@ -306,23 +306,23 @@ def display_assistant_response(container, result):
     with container:
         with st.chat_message("assistant"):
             if result["next_step"] == "need_more_info":
-                message = result.get("message", "More information is needed to process your request.")
+                message = result.get("message", "需要更多信息来处理您的请求。")
                 st.markdown(message)
                 st.session_state.conversation_history.append(
                     {"role": "assistant", "content": message}
                 )
             elif result["next_step"] == "execute_operation":
-                message = "Operation executed successfully! Here are the steps performed:\n"
+                message = "操作已成功执行！以下是执行的步骤：\n"
                 st.markdown(message)
                 st.session_state.operation_steps = result.get("operation", [])
                 for i, step in enumerate(st.session_state.operation_steps, 1):
-                    st.markdown(f"Step {i}: {step['tool_name']}")
+                    st.markdown(f"步骤 {i}：{step['tool_name']}")
                 full_message = (
                     message
                     + "\n"
                     + "\n".join(
                         [
-                            f"Step {i}: {step['tool_name']}"
+                            f"步骤 {i}：{step['tool_name']}"
                             for i, step in enumerate(
                                 st.session_state.operation_steps, 1
                             )
@@ -334,7 +334,7 @@ def display_assistant_response(container, result):
                 )
                 st.session_state.operation_result = result
             elif result["next_step"] == "out_of_scope":
-                message = result.get("message", "Sorry, your request is outside my processing scope.")
+                message = result.get("message", "抱歉，您的请求超出了我的处理范围。")
                 st.markdown(message)
                 st.session_state.conversation_history.append(
                     {"role": "assistant", "content": message}
@@ -349,7 +349,7 @@ def display_operation_result():
     """
     if st.session_state.operation_result:
         st.markdown("---")
-        st.markdown("## Operation Results")
+        st.markdown("## 操作结果")
 
         with st.container(border=True):
             for i, step in enumerate(st.session_state.operation_steps, 1):
@@ -358,7 +358,7 @@ def display_operation_result():
                     if df_name in st.session_state.workflow.dataframes:
                         df = st.session_state.workflow.dataframes[df_name]
                         st.markdown(f"#### {df_name}")
-                        st.caption(f"*Generated by Step {i}: {step['tool_name']}*")
+                        st.caption(f"*由步骤 {i} 生成：{step['tool_name']}*")
                         st.dataframe(df)
                         provide_csv_download(df, df_name)
                 st.markdown("---")
@@ -372,7 +372,7 @@ def display_feedback():
     """
     if "current_trace_id" in st.session_state:
         st.markdown("---")
-        st.markdown("##### Did this operation meet your requirements?")
+        st.markdown("##### 本次操作是否满足您的需求？")
 
         # Initialize feedback status to prevent duplicate submissions
         if "feedback_given" not in st.session_state:
@@ -382,7 +382,7 @@ def display_feedback():
 
         with col1:
             yes_button = st.button(
-                "👍 Yes",
+                "👍 满足",
                 key="feedback_yes",
                 use_container_width=True,
                 disabled=st.session_state.feedback_given,
@@ -395,7 +395,7 @@ def display_feedback():
 
         with col2:
             no_button = st.button(
-                "👎 No",
+                "👎 不满足",
                 key="feedback_no",
                 use_container_width=True,
                 disabled=st.session_state.feedback_given,
@@ -408,7 +408,7 @@ def display_feedback():
 
         with col3:
             if st.session_state.feedback_given:
-                st.success("Thank you for your feedback!")
+                st.success("感谢您的反馈！")
 
         if st.session_state.feedback_given:
             del st.session_state.current_trace_id
@@ -424,7 +424,7 @@ def provide_csv_download(df: pd.DataFrame, df_name: str):
     """
     csv = df.to_csv(index=False)
     st.download_button(
-        label=f"Download {df_name} (CSV)",
+        label=f"下载 {df_name} (CSV)",
         data=csv,
         file_name=f"{df_name}.csv",
         mime="text/csv",
